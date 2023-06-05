@@ -1,0 +1,66 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<canvas id="myChart" width="400" height="400"></canvas>
+
+<script>
+var data = {
+  "Overall_Score": "7",
+  "Ratings": {
+    "Story": "9/10",
+    "Gameplay": "8/10",
+    "Player Experience": "8/10",
+    "Technical Performance": "9/10",
+    "Innovation": "8/10",
+    "Issues": "4/10"
+  },
+  "Key_Sentences": {
+    "Positive": {
+      "Story": "Amazing story that seems awfully a realistic scenario for our world :/",
+      "Gameplay": "A nice variety of enemies and enemy system in general; each enemy feels unique with their own challenges and weaknesses.",
+      "Player Experience": "Played it on hard difficulty seems to be perfect balance between challenging but not super hard.",
+      "Technical Performance": "Amazing graphics, amazing world (both beautiful and alive) and level design!",
+      "Innovation": "A nice variety of weapons and armors so you can use whatever suits your playstyle or enemies you are facing"
+    },
+    "Negative": {
+      "Issues": "Inventory! It gets super tedious to manage in late game and many many items often feel 'useless'."
+    }
+  },
+  "Score_Calculation_Formula": "Overall_Score = (Story + Gameplay + Player Experience + Technical Performance + Innovation - Issues) / 5"
+}
+
+var positiveKeySentences = data.Key_Sentences.Positive;
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+        labels: Object.keys(data.Ratings).slice(0, 5),
+        datasets: [{
+            label: 'Game Review Ratings',
+            data: Object.values(data.Ratings).map(rating => parseFloat(rating)).slice(0, 5),
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+      scales: {
+        r: {
+            angleLines: {
+                display: false
+            },
+            suggestedMin: 0,
+            suggestedMax: 10
+        }
+    },
+        tooltips: {
+            callbacks: {
+                title: function(tooltipItem, data) {
+                    var label = data.labels[tooltipItem[0].index];
+                    return label + ": " + positiveKeySentences[label];
+                }
+            }
+        }
+    }
+});
+</script>
